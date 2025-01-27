@@ -61,14 +61,14 @@ void hi_prio_thread() {
 	set(&HI_PRIO_FINISHED);
 }
 
-int main() {
+int main(int argc) {
 	DWORD64 dwProcessAffinity, dwSystemAffinity;
 	BOOL ret = GetProcessAffinityMask(GetCurrentProcess(), &dwProcessAffinity, &dwSystemAffinity);
 	printf("proc affinity mask: %08x system: %08x (ret %d) \n", dwProcessAffinity, dwSystemAffinity, ret);
 
-	printf("main() priority: %d \n", GetThreadPriority(GetCurrentThread()));
+	printf("Initial main() priority: %d \n", GetThreadPriority(GetCurrentThread()));
 	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
-	printf("main() priority: %d \n", GetThreadPriority(GetCurrentThread()));
+	printf("main() priority after SetThreadPriority: %d \n", GetThreadPriority(GetCurrentThread()));
 
 	MUTEX = CreateMutex(0, 0, 0);
 
@@ -76,16 +76,23 @@ int main() {
 	HANDLE med_handle = CreateThread(0, 1024*100, med_prio_thread, 0, 0, 0);
 	HANDLE hi_handle = CreateThread(0, 1024*100, hi_prio_thread, 0, 0, 0);
 	
-	char* ret2 = SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
-	printf("SetThreadPriority ret value: %d \n", ret2);
-	// SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
-	SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
+	SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
+	SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
 
-	SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
+	if (argc == 1) {
+		printf("Running with low/mid/high priorities");
+		SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
+	} else {
+		printf("Running with low/mid/low priorities");
+		SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
+	}
 
 	int proc = 0x1;
+	char* ret3 = SetThreadAffinityMask(low_handle, 0x8);
+	printf("SetThreadAffinityMask ret value: %p \n", ret3);
 	// Force them to run on the same core
-	SetThreadAffinityMask(low_handle, proc);
+	char* ret2 = SetThreadAffinityMask(low_handle, proc);
+	printf("SetThreadAffinityMask ret value: %p \n", ret2);
 	SetThreadAffinityMask(med_handle, proc);
 	SetThreadAffinityMask(hi_handle, proc);
 
