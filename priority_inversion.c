@@ -62,13 +62,22 @@ void hi_prio_thread() {
 }
 
 int main() {
+	DWORD64 dwProcessAffinity, dwSystemAffinity;
+	BOOL ret = GetProcessAffinityMask(GetCurrentProcess(), &dwProcessAffinity, &dwSystemAffinity);
+	printf("proc affinity mask: %08x system: %08x (ret %d) \n", dwProcessAffinity, dwSystemAffinity, ret);
+
+	printf("main() priority: %d \n", GetCurrentThread());
+	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+	printf("main() priority: %d \n", GetCurrentThread());
+
 	MUTEX = CreateMutex(0, 0, 0);
 
 	HANDLE low_handle = CreateThread(0, 1024*100, low_prio_thread, 0, 0, 0);
 	HANDLE med_handle = CreateThread(0, 1024*100, med_prio_thread, 0, 0, 0);
 	HANDLE hi_handle = CreateThread(0, 1024*100, hi_prio_thread, 0, 0, 0);
 	
-	SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
+	char* ret2 = SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
+	printf("SetThreadPriority ret value: %d \n", ret2);
 	SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
 	// SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
 
