@@ -13,7 +13,7 @@ HANDLE MUTEX;
 volatile ULONG64 UNREAD_VOLATILE = 0;
 volatile ULONG64 UNREAD_VOLATILE2 = 0;
 
-void wait(ULONG* var) {
+void wait(volatile ULONG* var) {
 	UINT local_sync_value = *var;
 	while (local_sync_value == 0) {
 	      static ULONG zero = 0;
@@ -21,7 +21,7 @@ void wait(ULONG* var) {
 	      local_sync_value = *var;
 	}
 }
-void set(ULONG* var) {
+void set(volatile ULONG* var) {
 	*var = 1;
 	WakeByAddressAll(var);
 }
@@ -34,9 +34,7 @@ void low_prio_thread() {
 	wait(&LAUNCH_LOW_PRIO);
 	
 	// Wait a little bit just in case
-	while (UNREAD_VOLATILE2 != 0x1FFFFFF) {
-		UNREAD_VOLATILE2++;
-	}
+	SwitchToThread();
 	
 	ReleaseMutex(MUTEX);
 }
