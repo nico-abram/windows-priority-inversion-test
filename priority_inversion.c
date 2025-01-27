@@ -33,7 +33,7 @@ void low_prio_thread() {
 
 	wait(&LAUNCH_LOW_PRIO);
 	
-
+	// Wait a little bit just in case
 	while (UNREAD_VOLATILE2 != 0x1FFFFFF) {
 		UNREAD_VOLATILE2++;
 	}
@@ -80,19 +80,17 @@ int main(int argc) {
 	SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
 
 	if (argc == 1) {
-		printf("Running with low/mid/high priorities");
+		printf("Running with low/mid/high priorities \n");
 		SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
 	} else {
-		printf("Running with low/mid/low priorities");
+		printf("Running with low/mid/low priorities \n");
 		SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
 	}
 
 	int proc = 0x1;
-	char* ret3 = SetThreadAffinityMask(low_handle, 0x8);
-	printf("SetThreadAffinityMask ret value: %p \n", ret3);
 	// Force them to run on the same core
 	char* ret2 = SetThreadAffinityMask(low_handle, proc);
-	printf("SetThreadAffinityMask ret value: %p \n", ret2);
+	printf("SetThreadAffinityMask(%d) ret value (Zero means error): %p \n", proc, ret2);
 	SetThreadAffinityMask(med_handle, proc);
 	SetThreadAffinityMask(hi_handle, proc);
 
