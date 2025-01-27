@@ -83,10 +83,11 @@ int main() {
 
 	SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
 
+	int proc = 0x1;
 	// Force them to run on the same core
-	SetThreadAffinityMask(low_handle, 0x4);
-	SetThreadAffinityMask(med_handle, 0x4);
-	SetThreadAffinityMask(hi_handle, 0x4);
+	SetThreadAffinityMask(low_handle, proc);
+	SetThreadAffinityMask(med_handle, proc);
+	SetThreadAffinityMask(hi_handle, proc);
 
 	wait(&LOW_PRIO_THREAD_READY);
 
