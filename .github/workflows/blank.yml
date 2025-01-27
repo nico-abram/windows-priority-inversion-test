@@ -22,5 +22,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Build
         run: cl .\priority_inversion.c Synchronization.lib Kernel32.lib
-      - name: Run
+      - name: Run low/mid/high
         run: .\priority_inversion.exe
+      - name: Run low/mid/low
+        run: .\priority_inversion.exe make_argc_2
