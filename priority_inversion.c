@@ -62,11 +62,6 @@ void hi_prio_thread() {
 }
 
 int main() {
-
-	// Starve the cpu
-	while (UNREAD_VOLATILE != 0xFFFFFFFFFFFFFFFE) {
-		UNREAD_VOLATILE++;
-	}
 	MUTEX = CreateMutex(0, 0, 0);
 
 	HANDLE low_handle = CreateThread(0, 1024*100, low_prio_thread, 0, 0, 0);
