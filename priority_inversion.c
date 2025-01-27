@@ -66,9 +66,9 @@ int main() {
 	BOOL ret = GetProcessAffinityMask(GetCurrentProcess(), &dwProcessAffinity, &dwSystemAffinity);
 	printf("proc affinity mask: %08x system: %08x (ret %d) \n", dwProcessAffinity, dwSystemAffinity, ret);
 
-	printf("main() priority: %d \n", GetCurrentThread());
+	printf("main() priority: %d \n", GetThreadPriority(GetCurrentThread()));
 	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
-	printf("main() priority: %d \n", GetCurrentThread());
+	printf("main() priority: %d \n", GetThreadPriority(GetCurrentThread()));
 
 	MUTEX = CreateMutex(0, 0, 0);
 
