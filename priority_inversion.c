@@ -78,8 +78,8 @@ int main() {
 	
 	char* ret2 = SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
 	printf("SetThreadPriority ret value: %d \n", ret2);
-	SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
-	// SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
+	// SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
+	SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
 
 	SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
 
