@@ -70,9 +70,9 @@ int main() {
 	
 	SetThreadPriority(low_handle, THREAD_PRIORITY_NORMAL);
 	SetThreadPriority(med_handle, THREAD_PRIORITY_ABOVE_NORMAL);
-	SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
+	// SetThreadPriority(hi_handle, THREAD_PRIORITY_HIGHEST);
 
-	// SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
+	SetThreadPriority(hi_handle, THREAD_PRIORITY_NORMAL);
 
 	// Force them to run on the same core
 	SetThreadAffinityMask(low_handle, 0x4);
